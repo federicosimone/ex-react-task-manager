@@ -1,12 +1,12 @@
-import { createContext, useEffect, useState, useContext } from "react";
+import { createContext, useEffect, useState } from "react";
 
 //creo il contesto
 
 const TaskContext = createContext(null)
 
 //definisco il custom provider
+function useTasks() {
 
-function TaskProvider({ children }) {
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
@@ -22,20 +22,26 @@ function TaskProvider({ children }) {
         }
         fetchData();
 
-    }, [])
+    }, []);
 
 
+    const addTask = () => { };
+    const removeTask = () => { };
+    const updateTask = () => { };
+
+    return { tasks, addTask, removeTask, updateTask }
+}
+
+function TaskProvider({ children }) {
+    const tasksData = useTasks()
     return (
-        <TaskContext.Provider value={tasks}> {/*attenzione alle graffe, che saranno da riportare tali*/}
+        <TaskContext.Provider value={tasksData}>
             {children}
         </TaskContext.Provider>
     );
 
 };
 
-function useTask() {
-    const context = useContext(TaskContext);
-    return context;
-}
 
-export { TaskProvider, useTask }
+
+export { TaskProvider, useTasks } //esportando l'hook custom useTasks, nei componenti posso accedere a tasks e alle funzioni crud 

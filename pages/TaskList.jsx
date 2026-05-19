@@ -1,9 +1,9 @@
-import { useTask } from "../src/context/TaskContext";
+import { useTasks } from "../src/context/TaskContext";
 import TaskRow from "../components/TaskRow";
 
 function TaskList() {
 
-    const tasks = useTask();
+    const { tasks } = useTasks();
 
     return (
         <table className="table">
@@ -16,7 +16,10 @@ function TaskList() {
             </thead>
             <tbody>
                 {tasks.map(task => {
-                    return <TaskRow key={task.id} task={task} />
+                    return <TaskRow key={task.id}
+                        title={task.title}
+                        status={task.status}
+                        createdAt={task.createdAt} />
                 })}
 
             </tbody>
@@ -25,11 +28,3 @@ function TaskList() {
 }
 
 export default TaskList;
-
-/*<ul>
-                {tasks.map(task => (
-                    <li key={task.id}>
-                        {task.title}
-                    </li>
-                ))}
-            </ul>*/

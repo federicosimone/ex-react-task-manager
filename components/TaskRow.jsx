@@ -1,24 +1,25 @@
 //import { useTask } from "../src/context/TaskContext"
+import { memo } from "react"
 
 
-function TaskRow({ task }) { //passo task come prop per fare il map nel componente padre
+function TaskRow({ title, status, createdAt }) { //passo task come prop per fare il map nel componente padre
 
     //const tasks = useTask();
     return (
         <>
             <tr>
-                <td>{task.title}</td>
+                <td>{title}</td>
                 <td className={
-                    task.status === "To do" ? "bg-danger" :   //uso ternario concatenato per gestire gli sfondi
-                        task.status === "Doing" ? "bg-warning" :
-                            task.status === "Done" ? "bg-success" : ""}>
-                    {task.status}
+                    status === "To do" ? "bg-danger" :   //uso ternario concatenato per gestire gli sfondi
+                        status === "Doing" ? "bg-warning" :
+                            status === "Done" ? "bg-success" : ""}>
+                    {status}
                 </td>
-                <td> {task.createdAt} </td>
+                <td> {createdAt} </td>
             </tr>
 
         </>
     )
 }
 
-export default TaskRow
+export default memo(TaskRow);
