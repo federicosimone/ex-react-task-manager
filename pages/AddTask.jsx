@@ -1,6 +1,9 @@
 import { useMemo, useRef, useState } from "react"
+import { useTaskContext } from "../src/context/TaskContext";
 
 function AddTask() {
+
+    const { addTask } = useTaskContext();
 
     const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\\\",.<>?/`~";
 
@@ -11,7 +14,7 @@ function AddTask() {
     const RefDescription = useRef("")
 
     //per select
-    const RefSelect = useRef("To do")
+    const RefStatus = useRef("To do")
 
     const isTitleValid = useMemo(() => { //utilizo useMemo() perchè mi restituisce una valore (booleano in questo caso) e posso usarlo per le condizioni.
         const containSymbols = title.split("").some(char => {
@@ -28,7 +31,7 @@ function AddTask() {
         e.preventDefault();
 
         const description = RefDescription.current.value  //variabili che prendono il valore tramite useRef()
-        const select = RefSelect.current.value
+        const status = RefStatus.current.value
 
         //validazioni:
 
@@ -41,12 +44,23 @@ function AddTask() {
         }
 
         //invio dati con submit
-        alert("Hai aggiunto la Task con successo")
-        console.log({
+
+        const task = {
             title,
             description,
-            select
-        })
+            status
+        }
+
+        try {
+            addTask(task)  //quando la funzione ha terminato 
+            alert("Task caricata correttamente")
+            setTitle("")
+            RefDescription.current.value = ""
+            RefStatus.current.value = "To do"
+        } catch (errore) {
+            console.error("Si è verificato un errore", errore.message)
+        }
+
     }
 
     return (
@@ -58,9 +72,8 @@ function AddTask() {
                     <label >Description</label>
                     <textarea className="form-control" name="description" rows="2" placeholder="Add a description" ref={RefDescription}></textarea>
                     <label>Status</label>
-                    <select className="form-select" ref={RefSelect}>
-                        <option defaultValue={""}></option>
-                        <option value="To do">To do</option>
+                    <select className="form-select" ref={RefStatus}>
+                        <option defaultValue={"To do"}>To do</option>
                         <option value="Doing">Doing</option>
                         <option value="Done">Done</option>
                     </select>

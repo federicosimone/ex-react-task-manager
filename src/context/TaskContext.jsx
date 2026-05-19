@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 
 //creo il contesto
 
@@ -25,7 +25,23 @@ function useTasks() {
     }, []);
 
 
-    const addTask = () => { };
+    const addTask = async (taskData) => {
+        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(taskData)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            setTasks(prev => [...prev, data.task]);
+        } else {
+            throw new Error(data.message);
+        }
+    }
+
     const removeTask = () => { };
     const updateTask = () => { };
 
@@ -33,15 +49,19 @@ function useTasks() {
 }
 
 function TaskProvider({ children }) {
-    const tasksData = useTasks()
+    const taskData = useTasks()
     return (
-        <TaskContext.Provider value={tasksData}>
+        <TaskContext.Provider value={taskData}>
             {children}
         </TaskContext.Provider>
     );
 
+
 };
+function useTaskContext() {
+    return useContext(TaskContext);
+}
 
 
 
-export { TaskProvider, useTasks } //esportando l'hook custom useTasks, nei componenti posso accedere a tasks e alle funzioni crud 
+export { TaskProvider, useTaskContext } //esportando l'hook custom , nei componenti posso accedere a tasks e alle funzioni crud 

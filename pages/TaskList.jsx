@@ -1,9 +1,9 @@
-import { useTasks } from "../src/context/TaskContext";
+import { useTaskContext } from "../src/context/TaskContext";
 import TaskRow from "../components/TaskRow";
 
 function TaskList() {
 
-    const { tasks } = useTasks();
+    const { tasks } = useTaskContext();
 
     return (
         <div className="mt-3">
