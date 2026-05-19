@@ -6,33 +6,41 @@ function AddTask() {
 
     //per il title
     const [title, setTitle] = useState("")
+
     //per la textarea
     const RefDescription = useRef("")
 
     //per select
     const RefSelect = useRef("To do")
 
-    const isTitleValid = useMemo(() => {
+    const isTitleValid = useMemo(() => { //utilizo useMemo() perchè mi restituisce una valore (booleano in questo caso) e posso usarlo per le condizioni.
         const containSymbols = title.split("").some(char => {
-            return symbols.includes(char.toLowerCase())
+            return symbols.includes(char.toLowerCase()) //controllo se title contiene un simboli 
         })
 
-        return !containSymbols && title.trim() !== "";
-    }, [title])
+        return !containSymbols && title.trim() !== ""; //se NON contiene simboli e NON è una stringa vuota, allora è VALIDO 
+    }, [title]) //monitoro title come dipendenza
 
 
     const submit = (e) => {
+
+        //gestione preventDefault 
         e.preventDefault();
-        const description = RefDescription.current.value
+
+        const description = RefDescription.current.value  //variabili che prendono il valore tramite useRef()
         const select = RefSelect.current.value
 
         //validazioni:
+
+        //validazione titolo
 
         if (!isTitleValid) {
             alert("Il titolo non è corretto")
             console.error("Titolo errato")
             return
         }
+
+        //invio dati con submit
         alert("Hai aggiunto la Task con successo")
         console.log({
             title,
