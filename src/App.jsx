@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TaskList from '../pages/TaskList';
 import DefaultLayout from '../layout/DefaultLayout';
 import Homepage from '../pages/Homepage';
+import { TaskProvider } from './context/TaskContext';
 
 import './App.css'
 import AddTask from '../pages/AddTask';
@@ -12,15 +13,17 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route Component={DefaultLayout}>
-            <Route path="/" Component={Homepage} />
-            <Route path="/tasklist" Component={TaskList} />
-            <Route path="/addTask" Component={AddTask} />
-          </Route>
-        </Routes>
-      </BrowserRouter >
+      <TaskProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<DefaultLayout />}>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/tasklist" element={<TaskList />} />
+              <Route path="/addTask" element={<AddTask />} />
+            </Route>
+          </Routes>
+        </BrowserRouter >
+      </TaskProvider>
     </>
   )
 }
