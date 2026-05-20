@@ -17,7 +17,8 @@ function TaskList() {
                 </thead>
                 <tbody>
                     {tasks.map(task => {
-                        return <TaskRow id={task.id}
+                        return <TaskRow key={task.id}
+                            id={task.id}
                             title={task.title}
                             status={task.status}
                             createdAt={task.createdAt} />
