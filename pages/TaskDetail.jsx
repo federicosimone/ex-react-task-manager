@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useTaskContext } from "../src/context/TaskContext";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function TaskDetail() {
 
+    const navigate = useNavigate()
 
-
-    const { tasks } = useTaskContext()
+    const { tasks, removeTask } = useTaskContext()
 
     const { id } = useParams()
 
@@ -31,8 +32,12 @@ function TaskDetail() {
                     <p className="card-text">{task.description}</p>
                     <p className={task.status === "To do" ? "text-danger" :
                         task.status === "Doing" ? "text-warning" :
-                            task.status === "Done" ? "bg-success" : ""}>{task.status}</p>
-                    <button className="btn btn-danger">Elimina </button>
+                            task.status === "Done" ? "text-success" : ""}>{task.status}</p>
+                    <button className="btn btn-danger" onClick={async () => {
+                        await removeTask(task.id)
+                        navigate('/tasklist');
+                    }}>Elimina </button>
+
                 </div>
             </div>
         </>

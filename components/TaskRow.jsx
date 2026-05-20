@@ -3,6 +3,7 @@ import { memo } from "react"
 import { Link } from "react-router-dom";
 
 
+
 function TaskRow({ id, title, status, createdAt }) { //passo task come prop per fare il map nel componente padre
 
     //const tasks = useTask();

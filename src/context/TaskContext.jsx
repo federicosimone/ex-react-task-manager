@@ -1,8 +1,10 @@
 import { createContext, useEffect, useState, useContext } from "react";
 
+
 //creo il contesto
 
 const TaskContext = createContext(null)
+
 
 //definisco il custom provider
 function useTasks() {
@@ -42,7 +44,27 @@ function useTasks() {
         }
     }
 
-    const removeTask = () => { };
+    const removeTask = async (id) => {
+        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks/${id}`, {
+            method: "DELETE"
+        })
+
+        const data = await res.json()
+
+        if (data.success) {
+            setTasks(prev => prev.filter(task => task.id !== id))
+            alert("Task eliminata con successo")
+        } else {
+            throw new Error(alert(data.message))
+
+        }
+
+
+
+    };
+
+
+
     const updateTask = () => { };
 
     return { tasks, addTask, removeTask, updateTask }
