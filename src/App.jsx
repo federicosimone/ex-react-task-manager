@@ -7,6 +7,7 @@ import { TaskProvider } from './context/TaskContext';
 
 import './App.css'
 import AddTask from '../pages/AddTask';
+import TaskDetail from '../pages/TaskDetail';
 
 function App() {
   //const [count, setCount] = useState(0)
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/tasklist" element={<TaskList />} />
               <Route path="/addTask" element={<AddTask />} />
+              <Route path="/task/:id" element={<TaskDetail />}></Route>
             </Route>
           </Routes>
         </BrowserRouter >

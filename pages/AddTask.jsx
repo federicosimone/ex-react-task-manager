@@ -73,9 +73,9 @@ function AddTask() {
                     <textarea className="form-control" name="description" rows="2" placeholder="Add a description" ref={RefDescription}></textarea>
                     <label>Status</label>
                     <select className="form-select" ref={RefStatus}>
-                        <option defaultValue={"To do"}>To do</option>
-                        <option value="Doing">Doing</option>
-                        <option value="Done">Done</option>
+                        <option className="bg-danger" defaultValue={"To do"}>To do</option>
+                        <option className="bg-warning" value="Doing">Doing</option>
+                        <option className="bg-success" value="Done">Done</option>
                     </select>
                     <button className="btn btn-danger mt-3">Add Task</button>
                 </form>
