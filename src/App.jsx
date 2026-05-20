@@ -21,7 +21,7 @@ function App() {
               <Route path="/" element={<Homepage />} />
               <Route path="/tasklist" element={<TaskList />} />
               <Route path="/addTask" element={<AddTask />} />
-              <Route path="/task/:id" element={<TaskDetail />}></Route>
+              <Route path="/task/:id" element={<TaskDetail />} />
             </Route>
           </Routes>
         </BrowserRouter >

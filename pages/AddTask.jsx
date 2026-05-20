@@ -65,7 +65,7 @@ function AddTask() {
 
     return (
         <>
-            <div className="mt-3">
+            <div className="mt-3" style={{ width: "18rem" }}>
                 <form onSubmit={submit} id="taskForm">
                     <label>Title</label>
                     <input className="form-control" type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
