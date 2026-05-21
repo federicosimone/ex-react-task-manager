@@ -1,7 +1,7 @@
 function Homepage() {
     return (
         <>
-            <div>Questa è la homepage</div>
+            <div className="mt-2">Questa è la homepage</div>
         </>
 
     )

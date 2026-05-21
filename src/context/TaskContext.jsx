@@ -46,29 +46,57 @@ function useTasks() {
 
     const removeTask = async (id) => {
         const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks/${id}`, {
-            method: "DELETE"
+            method: "DELETE"                                                                //quando hai risposta da fetch, usa metodo DELETE
         })
 
-        const data = await res.json()
+        const data = await res.json()    //quando hai risposta trasforma la response in json()
 
         if (data.success) {
             setTasks(prev => prev.filter(task => task.id !== id))
             alert("Task eliminata con successo")
         } else {
-            throw new Error(alert(data.message))
+            throw new Error(data.message)
 
         }
-
-
 
     };
 
 
 
-    const updateTask = () => { };
+    const updateTask = async (updateTask) => {
+        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks/${updateTask.id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updateTask)
+            })
 
+        const data = await res.json()
+
+
+        if (data.success) {
+
+            setTasks(prev =>
+                prev.map(task =>
+                    task.id === data.task.id
+                        ? data.task
+                        : task
+                )
+            );
+
+        } else {
+            throw new Error(data.message);
+        }
+    }
     return { tasks, addTask, removeTask, updateTask }
-}
+};
+
+
+
+
+
 
 function TaskProvider({ children }) {
     const taskData = useTasks()

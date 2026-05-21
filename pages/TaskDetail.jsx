@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
 import { useState } from "react";
+import EditTaskModal from "../components/EditTaskModal";
 
 function TaskDetail() {
 
     const navigate = useNavigate()
 
-    const { tasks, removeTask } = useTaskContext()
+    const { tasks, removeTask, updateTask } = useTaskContext()
 
     const { id } = useParams()
 
@@ -17,6 +18,8 @@ function TaskDetail() {
     console.log(id)
 
     const [showModal, setShowModal] = useState(false)
+    const [showEdit, setShowEdit] = useState(false)
+    const [selectedTask, setSelectedTask] = useState(null)
 
     const task = tasks.find(task => task.id === Number(id))
 
@@ -28,16 +31,26 @@ function TaskDetail() {
 
     return (
         <>
-            <div className="mt-3 card p-2" id="modal-root">
-                <Modal
-                    title="Cancella task"
+            <EditTaskModal
+                show={showEdit}
+                task={selectedTask}
+                onClose={() => setShowEdit(false)}
+                onSave={(updatedTask) => {
+                    updateTask(updatedTask); // dal context
+                    setShowEdit(false);
+                }}
+            />
+
+            <div className="mt-3 card p-2" >
+                <Modal                                               //importo la modale nel nel componente padre, all'interno dell'elemento html che ho creato come root. 
+                    title="Cancella task"                            // il collegamento avvienne tramite l'id="modal-root"
                     content="Sei sicuro di voler eliminare la task?"
                     show={showModal}
                     onClose={() => setShowModal(false)}
-                    onConfirm={async () => {
+                    onConfirm={async () => {         //uso l'async/await perchè devo attendere che si svolga la chiamata fetch, prima di svolgere la funzione removeTask
                         await removeTask(task.id)
                         setShowModal(false)
-                        navigate('/tasklist');
+                        navigate('/tasklist');     //navigate mi permette di cambiare pagina in seguito ad un evento (come una funzione) 
                     }}
                 />
                 <div className="d-flex justify-content-between">
@@ -51,9 +64,16 @@ function TaskDetail() {
                         task.status === "Doing" ? "text-warning" :
                             task.status === "Done" ? "text-success" : ""}>{task.status}</p>
                     <button className="btn btn-danger" onClick={() => setShowModal(true)}>Elimina </button>
+                    <button className="btn ms-2 btn-warning" onClick={() => {
+                        setSelectedTask(task);
+                        setShowEdit(true);
+                    }}>
+                        Modifica Task
+                    </button>
 
                 </div>
             </div>
+
         </>
     )
 }

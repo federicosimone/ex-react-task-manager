@@ -18,6 +18,7 @@ function TaskRow({ id, title, status, createdAt }) { //passo task come prop per 
                     {status}
                 </td>
                 <td> {createdAt} </td>
+
             </tr>
 
         </>
