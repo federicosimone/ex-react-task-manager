@@ -1,5 +1,6 @@
-import { createContext, useEffect, useState, useContext } from "react";
-
+import { createContext, useContext } from "react";
+//const { VITE_APP_API_URL } = import.meta.env
+import useTasks from "../../customHooks/useTasks";
 
 //creo il contesto
 
@@ -7,95 +8,6 @@ const TaskContext = createContext(null)
 
 
 //definisco il custom provider
-function useTasks() {
-
-    const [tasks, setTasks] = useState([])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks`)
-                const data = await response.json()
-                console.log(data)
-                setTasks(data)
-            } catch (err) {
-                console.error("Errore nella chiamata API", err)
-            }
-        }
-        fetchData();
-
-    }, []);
-
-
-    const addTask = async (taskData) => {
-        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(taskData)
-        });
-        const data = await res.json();
-
-        if (data.success) {
-            setTasks(prev => [...prev, data.task]);
-        } else {
-            throw new Error(data.message);
-        }
-    }
-
-    const removeTask = async (id) => {
-        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks/${id}`, {
-            method: "DELETE"                                                                //quando hai risposta da fetch, usa metodo DELETE
-        })
-
-        const data = await res.json()    //quando hai risposta trasforma la response in json()
-
-        if (data.success) {
-            setTasks(prev => prev.filter(task => task.id !== id))
-            alert("Task eliminata con successo")
-        } else {
-            throw new Error(data.message)
-
-        }
-
-    };
-
-
-
-    const updateTask = async (updateTask) => {
-        const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/tasks/${updateTask.id}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(updateTask)
-            })
-
-        const data = await res.json()
-
-
-        if (data.success) {
-
-            setTasks(prev =>
-                prev.map(task =>
-                    task.id === data.task.id
-                        ? data.task
-                        : task
-                )
-            );
-
-        } else {
-            throw new Error(data.message);
-        }
-    }
-    return { tasks, addTask, removeTask, updateTask }
-};
-
-
-
-
 
 
 function TaskProvider({ children }) {

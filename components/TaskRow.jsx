@@ -25,4 +25,4 @@ function TaskRow({ id, title, status, createdAt }) { //passo task come prop per 
     )
 }
 
-export default memo(TaskRow);
+export default memo(TaskRow);  //uso memo, in modo che il componente non venga ri-renderizzato se le props non cambiano. 

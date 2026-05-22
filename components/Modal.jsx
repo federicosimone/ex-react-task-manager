@@ -31,7 +31,7 @@ function Modal({
                     </div>
                 </div>
             </div>
-        </>, document.getElementById("modal-root")
+        </>, document.getElementById("modal-root")  //il <div> con id="modal-root" si trova direttamente nel <body> di index.html 
     )
 }
 

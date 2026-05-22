@@ -1,6 +1,16 @@
 import { useTaskContext } from "../src/context/TaskContext";
 import TaskRow from "../components/TaskRow";
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
+
+function debounce(callback, delay) {
+    let timer
+    return (value) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            callback(value);
+        }, delay);
+    };
+};
 
 function TaskList() {
 
@@ -9,78 +19,54 @@ function TaskList() {
     const [sortBy, setSortBy] = useState("createdAt")
     const [sortOrder, setSortOrder] = useState(1)
 
-    const [inputValue, setInputValue] = useState("");
+    //const [inputValue, setInputValue] = useState("");
+
     const [searchQuery, setSearchQuery] = useState("")
-    console.log(searchQuery)
 
-    const sortedTasks = useMemo(() => {
-        const tasks2 = [...tasks]
+    const debouncedSetSearchQuery = useCallback(
+        debounce(setSearchQuery, 500)
+        , []);
 
-        const taskFiltered = tasks2.filter(task => {
-            return task.title.toLowerCase().includes(searchQuery.toLowerCase())
-        })
+    const sortedAndFilteredTasks = useMemo(() => {   //uso useMemo() per far si che 
+        return [...tasks]
 
+            .filter(task => task.title.toLowerCase().includes(searchQuery.toLowerCase()))
 
+            .sort((a, b) => {
+                let result = 0;
+                if (sortBy === "title") {
+                    result = a.title.localeCompare(b.title)
+                } else if (sortBy === "status") {
 
-        return taskFiltered.sort((a, b) => {
-            let result = 0;
-            if (sortBy === "title") {
-                result = a.title.localeCompare(b.title)
-            }
-            if (sortBy === "status") {
-                const order = { "To do": 1, "Doing": 2, "Done": 3 };
-                result = order[a.status] - order[b.status];
-            }
+                    const statusOptions = ["To do", "Doing", "Done"];
+                    result = statusOptions.indexOf(a.status) - statusOptions.indexOf(b - status)
+                } else if (sortBy === "createdAt") {
 
-            if (sortBy === "createdAt") {
-                result = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            }
+                    result = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+                }
 
-            return result * sortOrder;   // moltiplico result per lo stato sortOrder che ho dichiarato 1, in modo da far si  che sortOrder task cambi il segno
-        });
+                return result * sortOrder;   // moltiplico result per lo stato sortOrder che ho dichiarato 1, in modo da far si  che sortOrder task cambi il segno
+            });
     }, [tasks, sortBy, sortOrder, searchQuery]);
 
     const handleSort = (field) => {
         if (sortBy === field) {
             setSortOrder(prev => prev * -1);
         } else {
-            setSortBy(field);
-            setSortOrder(1);
+            setSortBy(field);  //ordina per "field"
+            setSortOrder(1);  //per resettare lo state 
         }
     };
-
-    function debounce(callback, delay) {
-        let timer
-        return (value) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => {
-                callback(value);
-            }, delay);
-        };
-    };
-
-
-
-
-
-    const setQueryDebounced = useCallback(
-        debounce(setSearchQuery, 1000)
-        , []);
-
-
-
 
 
     return (
         <>
 
-            <div className="mt-3">
+            <div className="mt-4">
                 <div className="mb-3">
-                    <label className=" form-label">Cerca task</label>
-                    <input className="form-control" type="text" name="" value={inputValue} onChange={(e) => {
-                        const value = e.target.value;
-                        setInputValue(value)
-                        setQueryDebounced(value)
+                    <h1 className="fw-bold">Le tue Tasks</h1>
+                    <input className="form-control" type="text" placeholder="Cerca una task..." onChange={(e) => {
+                        return debouncedSetSearchQuery(e.target.value)
                     }}></input>
                 </div>
                 <table className="table">
@@ -92,12 +78,12 @@ function TaskList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sortedTasks.map(task => {
+                        {sortedAndFilteredTasks.map(task => {
                             return <TaskRow key={task.id}
                                 id={task.id}
                                 title={task.title}
                                 status={task.status}
-                                createdAt={task.createdAt} />
+                                createdAt={new Date(task.createdAt).toLocaleDateString()} />
                         })}
 
                     </tbody>

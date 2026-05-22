@@ -1,11 +1,11 @@
 import { useMemo, useRef, useState } from "react"
 import { useTaskContext } from "../src/context/TaskContext";
 
+const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\\\",.<>?/`~";
+
 function AddTask() {
 
     const { addTask } = useTaskContext();
-
-    const symbols = "!@#$%^&*()-_=+[]{}|;:'\\\\\",.<>?/`~";
 
     //per il title
     const [title, setTitle] = useState("")
@@ -25,7 +25,7 @@ function AddTask() {
     }, [title]) //monitoro title come dipendenza
 
 
-    const submit = (e) => {
+    const submit = async e => {
 
         //gestione preventDefault 
         e.preventDefault();
@@ -38,21 +38,21 @@ function AddTask() {
         //validazione titolo
 
         if (!isTitleValid) {
-            alert("Il titolo non è corretto")
+            alert("Il titolo non è corretto o vuoto")
             console.error("Titolo errato")
             return
         }
 
         //invio dati con submit
 
-        const task = {
+        const newTask = {
             title,
             description,
             status
         }
 
         try {
-            addTask(task)  //quando la funzione ha terminato 
+            await addTask(newTask)  //quando la funzione ha terminato 
             alert("Task caricata correttamente")
             setTitle("")
             RefDescription.current.value = ""
@@ -68,7 +68,8 @@ function AddTask() {
             <div className="mt-3" style={{ width: "18rem" }}>
                 <form onSubmit={submit} id="taskForm">
                     <label>Title</label>
-                    <input className="form-control" type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                    <input className="form-control mb-1" type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                    {!isTitleValid ? <p className="text-danger">Il titolo è vuoto o contiene simboli</p> : <p className="text-success">Titolo inserito correttamente</p>}
                     <label >Description</label>
                     <textarea className="form-control" name="description" rows="2" placeholder="Add a description" ref={RefDescription}></textarea>
                     <label>Status</label>
