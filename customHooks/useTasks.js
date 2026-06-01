@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 const { VITE_APP_API_URL } = import.meta.env
 
 
-function useTasks() {
+function useTasks() {      //useTasks la logica e 
 
-    //mostra elenco tasks
+    //faccio la chiamata Api e popolo tasks che vado poi ad esportare e utilizzare nel context 
 
     const [tasks, setTasks] = useState([])
 

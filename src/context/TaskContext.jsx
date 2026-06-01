@@ -11,9 +11,9 @@ const TaskContext = createContext(null)
 
 
 function TaskProvider({ children }) {
-    const taskData = useTasks()
+    const taskData = useTasks()   //sto popolando tasksData con tutto ciò che viene esportato dal useTasks (tasks, addTasks, removeTask..ecc)
     return (
-        <TaskContext.Provider value={taskData}>
+        <TaskContext.Provider value={taskData}>   {/*tutti i figli possono accedere ai dati (taskData) tramite TaskContext.*/}
             {children}
         </TaskContext.Provider>
     );
@@ -21,8 +21,8 @@ function TaskProvider({ children }) {
 
 };
 function useTaskContext() {
-    return useContext(TaskContext);
-}
+    return useContext(TaskContext);       // equivale a scrivere const value = useContext(TaskContext) direttamente nel componente
+}                                         // Io gli credo un custom hook per avere il codice più pulito nei componenti     
 
 
 
